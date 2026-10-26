@@ -45,7 +45,7 @@ One effect needs no plan: `.venv/bin/python scripts/efekt.py <video> <out.mp4> -
 | `cam` | Frosted glass widgets float around the head: a big number, a render bar, a mini chart, a profile pill, a 4K badge, "Claude ile düzenlendi" | `text` (number), `handle`, `label` |
 | `belgesel` | Black and white on a magenta ground, a three-line stamped headline, a Follow button that gets clicked, a name bar | `text` (lines with \|), `name`, `handle`, `kicker` |
 | `yorunge` | The user's reels orbit the head, behind them at the top, in front at the bottom | `images`, `count`, `size`, `turns` |
-| `grafik` | A chart card slides down over the top half, the person moves to the bottom half, bars rise and count up | `title`, `lead`, `bars` (`11.2K::label\|…`) |
+| `grafik` | A chart card slides down over the top half, the person moves to the bottom half, bars rise and count up | `title`, `lead`, `bars` (`11.2K::label\|…`), `values=0` (no figures) |
 | `liste` | A task card under the chin: each step spins, then ticks green | `text` (`step::meta\|…`), `title` |
 | `kurgu` | An editing timeline on top with tracks and a glowing playhead, a warm film grade below | `title`, `lead`, `tc` |
 

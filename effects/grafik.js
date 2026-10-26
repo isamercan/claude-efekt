@@ -2,6 +2,7 @@
 // lower half. title, lead, bars ("değer::etiket|…", values like 11.2K / 1.5M)
 EFEKT.register("grafik", (c) => {
   const title = c.str("title", "En çok izlenen"), lead = c.str("lead", "reel'lerim");
+  const numbers = c.str("values", "1") !== "0"; // values=0: bars and labels only, no figures on screen
   const raw = c.list("bars", ["11.2K::CLAUDE", "6.5K::KURGU", "3.1K::YARDIM", "2.4K::DİL", "1.9K::BUL"]).slice(0, 7);
 
   // "11.2K" → {v: 11200, unit: "K", dec: 1}
@@ -51,7 +52,7 @@ EFEKT.register("grafik", (c) => {
     const g = c.el("div", k ? "gr-grid" : "gr-grid gr-base", chart);
     g.style.top = `${yOf(step * k)}px`;
     g.style.left = `${plotL}px`;
-    const t = c.el("div", "gr-tick mono", chart, k ? fmtAuto(step * k) : "0");
+    const t = c.el("div", "gr-tick mono", chart, !numbers ? "" : k ? fmtAuto(step * k) : "0");
     t.style.top = `${yOf(step * k)}px`;
     t.style.width = `${plotL - 30}px`;
   }
@@ -72,11 +73,12 @@ EFEKT.register("grafik", (c) => {
     // the value rides on the bar's top with the same ease, and counts up
     c.tl.fromTo(val, { y: h, opacity: 0, xPercent: -50, yPercent: -100 },
       { y: 0, opacity: 1, xPercent: -50, yPercent: -100, duration: 0.55, ease: "back.out(1.5)", immediateRender: false }, t);
-    c.count(val, 0, b.v, t, 0.6, fmtAs(b));
+    if (numbers) c.count(val, 0, b.v, t, 0.6, fmtAs(b));
     c.tl.fromTo(lab, { opacity: 0, y: -10, xPercent: -50 }, { opacity: 1, y: 0, xPercent: -50, duration: 0.3, ease: "power2.out", immediateRender: false }, t + 0.1);
   });
 
   // the average: a dashed line drawn from the left, then its tag
+  if (numbers) {
   const avgLine = c.el("div", "gr-avg", chart);
   Object.assign(avgLine.style, { top: `${yOf(avg)}px`, left: `${plotL}px` });
   const tag = c.el("div", "gr-avgtag mono", chart, `ort. ${fmtAuto(avg)}`);
@@ -84,6 +86,7 @@ EFEKT.register("grafik", (c) => {
   const ta = t0 + n * 0.06 + 0.35;
   c.tl.fromTo(avgLine, { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.inOut", immediateRender: false }, ta);
   c.tl.fromTo(tag, { opacity: 0, x: 16, yPercent: -100 }, { opacity: 1, x: 0, yPercent: -100, duration: 0.3, ease: "power2.out", immediateRender: false }, ta + 0.3);
+  }
 
   // motion: the ground and the camera move together (no gap ever shows), the card drops in with an overshoot
   c.tl.fromTo(ground, { yPercent: -100 }, { yPercent: 0, duration: 0.45, ease: "power3.out", immediateRender: false }, c.start);

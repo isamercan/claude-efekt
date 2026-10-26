@@ -54,7 +54,7 @@ EFEKT.register("kurgu", (c) => {
     Object.assign(ch.style, { left: `${a * laneW}px`, width: `${(b - a) * laneW}px` });
     lit.push([ch, a * laneW]);
   });
-  chips(rows[1].lane, "kg-cap", [[0.02, 0.3, "tek komut"], [0.33, 0.66, "sıfır uygulama"], [0.69, 0.97, "hazır"]]);
+  chips(rows[1].lane, "kg-cap", [[0.02, 0.3, "tek komut"], [0.33, 0.66, "editör yok"], [0.69, 0.97, "hazır"]]);
   chips(rows[2].lane, "kg-fx", [[0.06, 0.24, "zoom"], [0.3, 0.56, "grafik"], [0.62, 0.8, "spot"], [0.84, 0.96, "renk"]]);
   // sound: a waveform, dim underneath and lit up to the playhead
   const wave = (cls) => {

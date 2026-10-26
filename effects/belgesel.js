@@ -2,9 +2,9 @@
 // your head, a spaced-caps kicker, a three-line stamped headline beside your head, a Follow button a cursor clicks,
 // and your name in a pink bar. text (lines with |), name, handle, kicker
 EFEKT.register("belgesel", (c) => {
-  const lines = c.list("text", ["TEK KLİP.", "7 EFEKT.", "SIFIR UYGULAMA."]);
+  const lines = c.list("text", ["TEK KLİP.", "7 EFEKT.", "EDİTÖR YOK."]);
   const name = c.str("name", "İSA MERCAN"), handle = c.str("handle", "@isamercanai");
-  const kicker = c.str("kicker", "HER GÜN · YAPAY ZEKÂ SERİSİ");
+  const kicker = c.str("kicker", "YAPAY ZEKÂ İLE ÜRETİM");
   const W = c.W, H = c.H, tl = c.tl, T = c.at;
 
   // the face over the window, averaged: the layout is stamped, it does not jitter with the head
