@@ -28,14 +28,16 @@ EFEKT.register("grafik", (c) => {
   const avg = bars.reduce((s, b) => s + b.v, 0) / bars.length;
   const best = bars.findIndex((b) => b.v === max);
 
-  // the split: the face lands at ~66 % of the height, the card fills the space above it
-  const f0 = c.face(c.start);
+  // the split: the face lands at ~66 % of the height, the card fills the space above it. The card starts at y 250
+  // (gr-card's top: Instagram's Reels header covers the band above) and stops 70 px above the face; the dark ground
+  // behind it reaches 40 px below the card and always covers the band the camera shift opens at the top.
+  const CARD_TOP = 250, f0 = c.face(c.start);
   const shift = Math.max(0, Math.round(c.H * 0.66 - f0.y));
   const faceTop = f0.top + shift;
-  const cardH = Math.round(Math.min(c.H * 0.45, faceTop - 110));
+  const cardH = Math.round(Math.min(c.H * 0.45, faceTop - 70 - CARD_TOP));
 
   const ground = c.el("div", "gr-ground", c.top);
-  ground.style.height = `${cardH + 80}px`;
+  ground.style.height = `${Math.max(CARD_TOP + cardH + 40, shift)}px`;
   const card = c.el("div", "gr-card", c.top);
   card.style.height = `${cardH}px`;
   const head = c.el("div", "gr-head", card, `<span class="gr-title">${title}</span><span class="gr-lead">${lead}</span>`);
@@ -112,7 +114,7 @@ EFEKT.register("grafik", (c) => {
   // motion: the ground and the camera move together (no gap ever shows), the card drops in with an overshoot
   c.tl.fromTo(ground, { yPercent: -100 }, { yPercent: 0, duration: 0.45, ease: "power3.out", immediateRender: false }, c.start);
   c.camera({ y: shift });
-  c.tl.fromTo(card, { y: -cardH - 80 }, { y: 0, duration: 0.38, ease: "back.out(1.3)", immediateRender: false }, c.at(0.06));
+  c.tl.fromTo(card, { y: -CARD_TOP - cardH - 80 }, { y: 0, duration: 0.38, ease: "back.out(1.3)", immediateRender: false }, c.at(0.06));
   c.tl.fromTo(head, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, c.at(0.24));
   c.tl.fromTo(chart, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out", immediateRender: false }, c.at(0.3));
 });

@@ -11,13 +11,15 @@ EFEKT.register("kurgu", (c) => {
   const pad = (n) => String(n).padStart(2, "0");
   const tcFmt = (n) => { n = Math.round(n); const f = n % FPS, s = Math.floor(n / FPS); return `${pad(Math.floor(s / 3600))}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}:${pad(f)}`; };
 
-  // the split: the face lands at ~66 % of the height, the card fills the space above it
-  const f0 = c.face(c.start);
+  // the split: the face lands at ~66 % of the height, the card fills the space above it. The card starts at y 250
+  // (kg-card's top: Instagram's Reels header covers the band above) and stops 70 px above the face; the dark ground
+  // behind it reaches 40 px below the card and always covers the band the camera shift opens at the top.
+  const CARD_TOP = 250, f0 = c.face(c.start);
   const shift = Math.max(0, Math.round(c.H * 0.66 - f0.y));
-  const cardH = Math.round(Math.min(c.H * 0.45, f0.top + shift - 110));
+  const cardH = Math.round(Math.min(c.H * 0.45, f0.top + shift - 70 - CARD_TOP));
 
   const ground = c.el("div", "kg-ground", c.top);
-  ground.style.height = `${cardH + 80}px`;
+  ground.style.height = `${Math.max(CARD_TOP + cardH + 40, shift)}px`;
   const card = c.el("div", "kg-card", c.top);
   card.style.height = `${cardH}px`;
 
@@ -96,7 +98,7 @@ EFEKT.register("kurgu", (c) => {
   c.grade("sepia(0.35) saturate(1.2) contrast(1.08)");
   c.tl.fromTo(ground, { yPercent: -100 }, { yPercent: 0, duration: 0.45, ease: "power3.out", immediateRender: false }, c.start);
   c.camera({ y: shift });
-  c.tl.fromTo(card, { y: -cardH - 80 }, { y: 0, duration: 0.38, ease: "back.out(1.3)", immediateRender: false }, c.at(0.06));
+  c.tl.fromTo(card, { y: -CARD_TOP - cardH - 80 }, { y: 0, duration: 0.38, ease: "back.out(1.3)", immediateRender: false }, c.at(0.06));
   c.tl.fromTo([bar, head], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.05, ease: "power3.out", immediateRender: false }, c.at(0.22));
   rows.forEach(({ row }, i) => c.tl.fromTo(row, { opacity: 0, x: -30 },
     { opacity: 1, x: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, c.at(0.3 + i * 0.05)));

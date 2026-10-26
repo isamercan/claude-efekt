@@ -44,7 +44,9 @@ def prepare(video, cache):
     H = round(WIDTH * h / w / 2) * 2
     plate = cache / "plate.mp4"
     if not plate.exists():
-        run(["ffmpeg", "-v", "error", "-y", "-i", str(video), "-an", "-vf", f"scale={WIDTH}:{H}", "-c:v", "libx264",
+        run(["ffmpeg", "-v", "error", "-y", "-i", str(video), "-an", "-vf",
+             # lanczos with full chroma, then a light luma-only unsharp: non-generative, the face is not redrawn
+             f"scale={WIDTH}:{H}:flags=lanczos+accurate_rnd+full_chroma_int,unsharp=5:5:0.5:5:5:0", "-c:v", "libx264",
              "-crf", "14", "-preset", "slow", "-pix_fmt", "yuv420p", str(plate)])
     face = cache / "face.json"
     if not face.exists():

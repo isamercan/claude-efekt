@@ -1,7 +1,7 @@
-.kg-ground { position: absolute; left: 0; right: 0; top: 0; background-color: #E8E1D4;
-  background-image: radial-gradient(rgba(20,20,20,0.13) 1.6px, transparent 2px); background-size: 36px 36px;
+.kg-ground { position: absolute; left: 0; right: 0; top: 0; background-color: #0b0a09;
+  background-image: radial-gradient(rgba(255,255,255,0.05) 1.6px, transparent 2px); background-size: 36px 36px;
   box-shadow: 0 18px 40px rgba(0,0,0,0.45); border-radius: 0 0 44px 44px; }
-.kg-card { position: absolute; left: 40px; top: 40px; width: 1000px; background: linear-gradient(180deg, #1A161C, #121014 40%);
+.kg-card { position: absolute; left: 40px; top: 250px; width: 1000px; background: linear-gradient(180deg, #1A161C, #121014 40%);
   border-radius: 36px; border: 1.5px solid rgba(255,255,255,0.10);
   box-shadow: 0 34px 70px rgba(40,20,10,0.38), 0 0 0 1px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08); overflow: hidden; }
 .kg-bar { position: absolute; left: 0; right: 0; top: 0; height: 92px; display: flex; align-items: center; gap: 26px; padding: 0 40px;
