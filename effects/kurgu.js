@@ -1,7 +1,11 @@
 // kurgu: split screen — a dark editing timeline drops in on top (video, captions, effects, sound), a glowing playhead
-// sweeps it, a REC timecode and a % count; you move to the lower half under a warm film grade. title, lead, tc
+// sweeps it, a REC timecode and a % count; you move to the lower half under a warm film grade. title, lead, tc,
+// caps (caption chips, |-separated), effects (effect chips, |-separated; not "fx", which is the effect's own name in
+// the plan): a few large chips read on a phone, so at most 4 each
 EFEKT.register("kurgu", (c) => {
   const title = c.str("title", "Claude"), lead = c.str("lead", "kurguluyor"), tc = c.str("tc", "00:00:03:12");
+  const caps = c.list("caps", ["tek komut", "editör yok", "hazır"]).slice(0, 4);
+  const fxs = c.list("effects", ["zoom", "grafik", "spot", "renk"]).slice(0, 4);
   const FPS = 30;
   const tcFrames = (() => { const p = tc.split(":").map(Number); while (p.length < 4) p.unshift(0); return ((p[0] * 60 + p[1]) * 60 + p[2]) * FPS + p[3]; })();
   const pad = (n) => String(n).padStart(2, "0");
@@ -42,25 +46,30 @@ EFEKT.register("kurgu", (c) => {
   });
   const lit = [];                                            // [node, x in lane px]: lit when the playhead passes
   // video: a strip of frame tiles
-  const nT = 8, gap = 6, tw = (laneW - 12 - gap * (nT - 1)) / nT;
+  const nT = 5, gap = 8, tw = (laneW - 12 - gap * (nT - 1)) / nT;
   for (let i = 0; i < nT; i++) {
     const t = c.el("div", "kg-thumb", rows[0].lane);
     Object.assign(t.style, { left: `${6 + i * (tw + gap)}px`, width: `${tw}px` });
     lit.push([t, 6 + i * (tw + gap)]);
   }
   // captions and effects: chips
-  const chips = (lane, cls, items) => items.forEach(([a, b, txt]) => {
-    const ch = c.el("div", `kg-chip ${cls} mono`, lane, txt);
-    Object.assign(ch.style, { left: `${a * laneW}px`, width: `${(b - a) * laneW}px` });
-    lit.push([ch, a * laneW]);
-  });
-  chips(rows[1].lane, "kg-cap", [[0.02, 0.3, "tek komut"], [0.33, 0.66, "editör yok"], [0.69, 0.97, "hazır"]]);
-  chips(rows[2].lane, "kg-fx", [[0.06, 0.24, "zoom"], [0.3, 0.56, "grafik"], [0.62, 0.8, "spot"], [0.84, 0.96, "renk"]]);
+  // the lane is split evenly between the chips, each word in a slot of its own
+  const chips = (lane, cls, items) => {
+    const g = 10, w = (laneW - 12 - g * (items.length - 1)) / items.length;
+    items.forEach((txt, i) => {
+      const x = 6 + i * (w + g);
+      const ch = c.el("div", `kg-chip ${cls} mono`, lane, txt.trim());
+      Object.assign(ch.style, { left: `${x}px`, width: `${w}px` });
+      lit.push([ch, x]);
+    });
+  };
+  chips(rows[1].lane, "kg-cap", caps);
+  chips(rows[2].lane, "kg-fx", fxs);
   // sound: a waveform, dim underneath and lit up to the playhead
   const wave = (cls) => {
     const w = c.el("div", `kg-wave ${cls}`, rows[3].lane);
     w.setAttribute("data-layout-allow-overflow", "");
-    const nB = 70, step = (laneW - 24) / nB;
+    const nB = 44, step = (laneW - 24) / nB;
     for (let i = 0; i < nB; i++) {
       const a = Math.abs(Math.sin(i * 0.61) * Math.sin(i * 0.173 + 1.1)) * 0.8 + Math.abs(Math.sin(i * 2.3)) * 0.2;
       const b = c.el("i", "", w);

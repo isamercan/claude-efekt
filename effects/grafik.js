@@ -45,7 +45,8 @@ EFEKT.register("grafik", (c) => {
   const chartTop = 250, chartBottom = cardH - 92;           // card px: the plot area
   chart.style.top = `${chartTop}px`;
   chart.style.height = `${chartBottom - chartTop}px`;
-  const plotH = chartBottom - chartTop, plotL = 118, plotW = 1000 - plotL - 48;
+  // without figures there are no tick labels, so the plot takes the whole width and the label slots widen
+  const plotH = chartBottom - chartTop, plotL = numbers ? 118 : 56, plotW = 1000 - plotL - 48;
   const yOf = (v) => plotH - (v / top) * plotH;
 
   for (let k = 0; k <= 3; k++) {
@@ -58,8 +59,8 @@ EFEKT.register("grafik", (c) => {
   }
 
   const n = bars.length, slot = plotW / n, bw = Math.min(118, slot * 0.66);
-  const valSize = Math.round(Math.min(46, slot * 0.34)), labSize = Math.round(Math.max(24, Math.min(28, slot * 0.2)));
-  const t0 = c.at(0.42);
+  const valSize = Math.round(Math.min(46, slot * 0.34)), labSize = Math.round(Math.max(30, Math.min(36, slot * 0.22)));
+  const t0 = c.at(0.42), barEls = [];
   bars.forEach((b, i) => {
     const cx = plotL + slot * (i + 0.5), h = Math.max(6, (b.v / top) * plotH);
     const bar = c.el("div", i === best ? "gr-bar gr-best" : "gr-bar", chart);
@@ -75,7 +76,27 @@ EFEKT.register("grafik", (c) => {
       { y: 0, opacity: 1, xPercent: -50, yPercent: -100, duration: 0.55, ease: "back.out(1.5)", immediateRender: false }, t);
     if (numbers) c.count(val, 0, b.v, t, 0.6, fmtAs(b));
     c.tl.fromTo(lab, { opacity: 0, y: -10, xPercent: -50 }, { opacity: 1, y: 0, xPercent: -50, duration: 0.3, ease: "power2.out", immediateRender: false }, t + 0.1);
+    barEls.push(bar);
   });
+
+  // values=0: no figures to count, so the bars stay alive once they are up — the best bar pulses with a glow,
+  // the others take one small breath each (a scale-Y overshoot), staggered left to right
+  if (!numbers) {
+    const tb = t0 + (n - 1) * 0.06 + 0.62;
+    barEls.forEach((bar, i) => {
+      if (i === best) {
+        const glow = "0px 10px 30px 0px rgba(230,170,30,0.45)", hot = "0px 0px 64px 10px rgba(255,205,60,0.95)";
+        for (const [k, at] of [[1.09, tb], [1.05, tb + 0.62]]) {
+          c.tl.fromTo(bar, { scaleY: 1, boxShadow: glow }, { scaleY: k, boxShadow: hot, duration: 0.2, ease: "power2.out", immediateRender: false }, at);
+          c.tl.to(bar, { scaleY: 1, boxShadow: glow, duration: 0.36, ease: "power2.inOut" }, at + 0.2);
+        }
+      } else {
+        const at = tb + 0.14 + i * 0.08;
+        c.tl.fromTo(bar, { scaleY: 1 }, { scaleY: 1.06, duration: 0.18, ease: "sine.out", immediateRender: false }, at);
+        c.tl.to(bar, { scaleY: 1, duration: 0.42, ease: "back.out(2.2)" }, at + 0.18);
+      }
+    });
+  }
 
   // the average: a dashed line drawn from the left, then its tag
   if (numbers) {

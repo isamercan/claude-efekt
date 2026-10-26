@@ -1,5 +1,5 @@
 // cam: frosted glass widgets float around your head (never over the face) and pop in one after another:
-// a big number, a render in progress, a mini chart, a profile pill, a 4K ring, an "edited with Claude" pill.
+// a big number, a render in progress, a mini chart, a profile pill, an HD ring (the render is 1080p), an "edited with Claude" pill.
 // text (the big number), handle, label (the render card's label)
 EFEKT.register("cam", (c) => {
   const big = c.str("text", "7"), handle = c.str("handle", "@isamercanai"), label = c.str("label", "Render alınıyor");
@@ -51,12 +51,12 @@ EFEKT.register("cam", (c) => {
     `<div class="cam-av">İM</div><div class="cam-who"><b>${handle}</b><span>düzenleniyor…</span></div>`);
   // the pill sizes to its text and hangs from the right margin (it sits beside the crown, where the head is narrow)
   Object.assign(pr.parentNode.style, { left: "auto", right: `${M}px` });
-  // (e) the 4K ring
+  // (e) the HD ring
   const R = 78, C = 2 * Math.PI * R;
   const ringD = 210;
   const k = widget("cam-k", rightX + (rightW - ringD) / 2, pY + 170, ringD, "50% 50%",
     `<svg viewBox="0 0 200 200"><circle class="cam-track" cx="100" cy="100" r="${R}"/>` +
-    `<circle class="cam-ring" cx="100" cy="100" r="${R}" style="stroke-dasharray:${C};stroke-dashoffset:${C}"/></svg><div class="cam-4k">4K</div>`);
+    `<circle class="cam-ring" cx="100" cy="100" r="${R}" style="stroke-dasharray:${C};stroke-dashoffset:${C}"/></svg><div class="cam-hd">HD</div>`);
   // (f) bottom centre: the pill
   const pill = widget("cam-pill", 0, H * 0.83, 0, "50% 50%", `${spark}<span><b>Claude</b> ile düzenlendi</span>`);
   pill.parentNode.style.left = "0"; pill.parentNode.style.width = `${W}px`;

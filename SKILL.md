@@ -42,12 +42,12 @@ One effect needs no plan: `.venv/bin/python scripts/efekt.py <video> <out.mp4> -
 | name | what happens | options |
 |---|---|---|
 | `spot` | The lights go out, the person stays lit, a glowing word appears behind their head | `text`, `color`, `push` |
-| `cam` | Frosted glass widgets float around the head: a big number, a render bar, a mini chart, a profile pill, a 4K badge, "Claude ile düzenlendi" | `text` (number), `handle`, `label` |
+| `cam` | Frosted glass widgets float around the head: a big number, a render bar, a mini chart, a profile pill, an HD badge, "Claude ile düzenlendi" | `text` (number), `handle`, `label` |
 | `belgesel` | Black and white on a magenta ground, a three-line stamped headline, a Follow button that gets clicked, a name bar | `text` (lines with \|), `name`, `handle`, `kicker` |
 | `yorunge` | The user's reels orbit the head, behind them at the top, in front at the bottom | `images`, `count`, `size`, `turns` |
 | `grafik` | A chart card slides down over the top half, the person moves to the bottom half, bars rise and count up | `title`, `lead`, `bars` (`11.2K::label\|…`), `values=0` (no figures) |
 | `liste` | A task card under the chin: each step spins, then ticks green | `text` (`step::meta\|…`), `title` |
-| `kurgu` | An editing timeline on top with tracks and a glowing playhead, a warm film grade below | `title`, `lead`, `tc` |
+| `kurgu` | An editing timeline on top with tracks and a glowing playhead, a warm film grade below | `title`, `lead`, `tc`, `caps` (caption chips, `a\|b\|c`), `effects` (effect chips, `a\|b\|c\|d`) |
 
 ## Rules
 - Never cover the face. If a check frame shows text on it, shorten the text or move the effect in time.

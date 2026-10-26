@@ -16,8 +16,8 @@
 .cam-render .cam-head { font-size: 32px; }
 .cam-bar { position: relative; height: 16px; border-radius: 8px; background: rgba(255, 255, 255, 0.18); margin: 22px 0 16px; overflow: hidden; }
 .cam-bar i { position: absolute; inset: 0; border-radius: 8px; background: linear-gradient(90deg, #fff, #ffe9c9); transform-origin: 0 50%; transform: scaleX(0); box-shadow: 0 0 14px rgba(255, 255, 255, 0.6); }
-.cam-meta { display: flex; justify-content: space-between; font-weight: 500; font-size: 26px; color: rgba(255, 255, 255, 0.82); }
-.cam-pct { font-weight: 700; color: #fff; font-size: 28px; }
+.cam-meta { display: flex; justify-content: space-between; font-weight: 500; font-size: 28px; color: rgba(255, 255, 255, 0.82); }
+.cam-pct { font-weight: 700; color: #fff; font-size: 30px; }
 .cam-title { font-weight: 800; font-size: 32px; letter-spacing: -0.01em; }
 .cam-bars { display: flex; align-items: flex-end; gap: 14px; height: 150px; margin-top: 20px; }
 .cam-bars i { flex: 1; border-radius: 10px 10px 4px 4px; background: linear-gradient(180deg, #ef9a78, #d97757); transform-origin: 50% 100%; transform: scaleY(0); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); }
@@ -26,13 +26,13 @@
 .cam-av { flex: none; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
   font-weight: 800; font-size: 32px; background: linear-gradient(140deg, #f0a383, #c25f3f); border: 2px solid rgba(255, 255, 255, 0.6); text-shadow: none; }
 .cam-who { display: flex; flex-direction: column; min-width: 0; }
-.cam-who b { font-weight: 800; font-size: 28px; white-space: nowrap; letter-spacing: -0.01em; }
-.cam-who span { font-weight: 500; font-size: 25px; color: rgba(255, 255, 255, 0.8); white-space: nowrap; }
+.cam-who b { font-weight: 800; font-size: 31px; white-space: nowrap; letter-spacing: -0.01em; }
+.cam-who span { font-weight: 500; font-size: 28px; color: rgba(255, 255, 255, 0.8); white-space: nowrap; }
 .cam-k { width: 210px; height: 210px; padding: 0; border-radius: 50%; }
 .cam-k svg { position: absolute; inset: 5px; width: 200px; height: 200px; transform: rotate(-90deg); }
 .cam-track { fill: none; stroke: rgba(255, 255, 255, 0.16); stroke-width: 14; }
 .cam-ring { fill: none; stroke: #34d058; stroke-width: 14; stroke-linecap: round; filter: drop-shadow(0 0 8px rgba(52, 208, 88, 0.7)); }
-.cam-4k { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 64px; letter-spacing: -0.03em; }
+.cam-hd { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 70px; letter-spacing: -0.03em; }
 .cam-pill { display: flex; align-items: center; gap: 16px; width: max-content; margin: 0 auto; padding: 24px 44px; border-radius: 80px;
   font-weight: 600; font-size: 40px; letter-spacing: -0.01em; background: linear-gradient(160deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1)), rgba(60, 52, 46, 0.42); }
 .cam-pill span { white-space: nowrap; }

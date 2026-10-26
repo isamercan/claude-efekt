@@ -3,7 +3,7 @@
 EFEKT.register("yorunge", (c) => {
   const imgs = c.list("images", []);
   const n = Math.max(3, Math.min(10, Math.round(c.num("count", 7))));
-  const size = c.num("size", 170), turns = c.num("turns", 1);
+  const size = c.num("size", 238), turns = c.num("turns", 1.5);
   const cw = size, ch = size * 16 / 9;
   const W = c.W, H = c.H;
   const SB = 0.74, SF = 1.12; // scale on the far and the near side
@@ -47,9 +47,11 @@ EFEKT.register("yorunge", (c) => {
     const cx = fx, cy = fy - avg.h * 0.12;
     // horizontally: ~1.6 face widths, kept inside the frame with the near card's half width
     const rx = Math.min(avg.w * 1.6, W / 2 - (cw * SF) / 2 - 22, cx - (cw * SF) / 2 - 22 + 0, W - cx - (cw * SF) / 2 - 22);
-    // vertically flat on the far side; on the near side deep enough that a card passes under the chin, not the face
+    // vertically flat on the far side; on the near side the cards pass at shoulder height, and where a card comes
+    // in front of the face column it dips just enough that its top edge stays under the chin
     const ryB = rx * 0.34;
-    const ryF = Math.max(rx * 0.34, avg.y + avg.h * 0.62 + (ch * SF) / 2 - cy);
+    const ryF = Math.max(rx * 0.34, avg.y + avg.h * 0.95 - cy);
+    const chin = avg.y + avg.h * 0.5 + 22, faceHalf = avg.w * 0.58;
     // in over the first 0.45 s (the ring opens), out over the last 0.3 s (it closes and fades)
     const tIn = Math.min(1, (p * c.dur) / 0.45), tOut = Math.max(0, 1 - ((1 - p) * c.dur) / 0.3);
     const open = 0.55 + 0.45 * grow(tIn) - 0.25 * shrink(tOut);
@@ -61,10 +63,17 @@ EFEKT.register("yorunge", (c) => {
       const s = Math.sin(th), co = Math.cos(th);
       const ex = rx * co * open, ey = (s > 0 ? ryF : ryB) * s * open;
       const x = cx + ex * Math.cos(TILT) - ey * Math.sin(TILT);
-      const y = cy + ex * Math.sin(TILT) + ey * Math.cos(TILT);
+      let y = cy + ex * Math.sin(TILT) + ey * Math.cos(TILT);
       const d = (s + 1) / 2; // 0 far .. 1 near
       const sc = (SB + (SF - SB) * d) * (0.7 + 0.3 * open);
       const near = s > 0;
+      if (near) {
+        // fully under the chin while the card overlaps the face column, eased back up to the shoulder path beside it
+        const reach = faceHalf + (cw * sc) / 2 + 18, gap = Math.abs(x - fx) - reach;
+        const k = gap <= 0 ? 1 : gap >= 70 ? 0 : 1 - ease(gap / 70);
+        const under = chin + (ch * sc) / 2;
+        if (under > y) y += (under - y) * k;
+      }
       const z = Math.round(d * 100);
       // a slight lean into the direction of travel, and a turn about the vertical as it rounds the side
       const rot = -co * 7 + TILT * 57.3 * 0.6;

@@ -9,19 +9,27 @@ EFEKT.register("belgesel", (c) => {
 
   // the face over the window, averaged: the layout is stamped, it does not jitter with the head
   const N = 12, avg = { x: 0, y: 0, w: 0, h: 0 };
+  // and its reach: the furthest the face goes left and right over the window (a lean must not bring the head into the text)
+  const reach = { left: Infinity, right: -Infinity };
   for (let k = 0; k < N; k++) {
     const f = c.face(c.start + (c.dur * k) / (N - 1));
     for (const key in avg) avg[key] += f[key] / N;
+  }
+  for (let t = c.start; t <= c.end; t += 1 / 30) {
+    const f = c.face(t);
+    reach.left = Math.min(reach.left, f.left); reach.right = Math.max(reach.right, f.right);
   }
 
   // the camera slides you to one side so the headline gets a column of its own
   const S = 1.06, OX = W / 2, OY = H * 0.4;
   const textRight = avg.x <= W / 2;
-  const target = textRight ? W * 0.31 : W * 0.69;
+  const target = textRight ? W * 0.29 : W * 0.71;
   const DX = Math.max(-250, Math.min(250, target - (OX + (avg.x - OX) * S)));
   const vis = (x, y) => [OX + (x - OX) * S + DX, OY + (y - OY) * S];
   const [fx, fy] = vis(avg.x, avg.y), fw = avg.w * S, fh = avg.h * S;
-  const faceL = fx - fw / 2, faceR = fx + fw / 2, faceT = fy - fh / 2, faceB = fy + fh / 2;
+  const faceT = fy - fh / 2, faceB = fy + fh / 2;
+  // the head (hair and ears) reaches past the face box by about a tenth of its width
+  const headL = vis(reach.left, 0)[0] - fw * 0.12, headR = vis(reach.right, 0)[0] + fw * 0.12;
   c.camera({ scale: S, x: DX }, c.start, c.start + 0.5, "power3.inOut");
   c.grade("grayscale(1) contrast(1.18) brightness(1.04)", 0.25);
 
@@ -46,8 +54,10 @@ EFEKT.register("belgesel", (c) => {
 
   // ---- on top: kicker, headline, follow, name ----
   const M = 60;
-  const colL = textRight ? Math.max(faceR + fw * 0.2, W * 0.5) : M;
-  const colR = textRight ? W - M : Math.min(faceL - fw * 0.2, W * 0.5);
+  // the headline column keeps at least CLEAR px from the head at its widest
+  const CLEAR = 44;
+  const colL = textRight ? Math.max(headR + CLEAR, W * 0.5) : M;
+  const colR = textRight ? W - M : Math.min(headL - CLEAR, W * 0.5);
   const colW = colR - colL;
 
   const kick = c.el("div", "bg-kicker", c.top, kicker.split("·").map((s, i) => (i ? `<b>·</b>${s}` : s)).join(""));
@@ -56,7 +66,7 @@ EFEKT.register("belgesel", (c) => {
 
   // the headline: each line fitted to the column (a width estimate per glyph; the fonts are not loaded at build time)
   const em = (s, lead) => [...s].reduce((a, ch) => a + (lead
-    ? (/[ .,]/.test(ch) ? 0.24 : /[IİÎ1]/.test(ch) ? 0.32 : /[MW]/.test(ch) ? 0.9 : 0.64)
+    ? (/[ .,]/.test(ch) ? 0.24 : /[IİÎ1]/.test(ch) ? 0.32 : /[MW]/.test(ch) ? 0.94 : 0.69)
     : (/[ .,]/.test(ch) ? 0.25 : /[IİÎ1]/.test(ch) ? 0.27 : /[MW]/.test(ch) ? 0.88 : 0.66)), 0);
   const maxSize = 128;
   const big = Math.min(maxSize, ...lines.slice(0, -1).map((s) => colW / em(s, false)));

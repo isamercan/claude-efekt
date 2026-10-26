@@ -24,4 +24,4 @@
 .ls-tick circle { fill: #22c55e; }
 .ls-tick path { fill: none; stroke: #fff; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
 .ls-step { flex: 1; font-weight: 800; font-size: 42px; letter-spacing: -0.015em; white-space: nowrap; }
-.ls-meta { font-size: 28px; font-weight: 600; color: rgba(255, 255, 255, 0.62); white-space: nowrap; }
+.ls-meta { font-size: 30px; font-weight: 600; color: rgba(255, 255, 255, 0.62); white-space: nowrap; }
